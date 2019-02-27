@@ -129,14 +129,12 @@ def build(ctx):
         ctx.wayland_protocol_header(proto_dir = ctx.env.WL_PROTO_DIR,
             protocol  = "unstable/idle-inhibit/idle-inhibit-unstable-v1",
             target    = "video/out/wayland/idle-inhibit-v1.h")
-        ctx.wayland_protocol_code(proto_dir = "video/out/wayland",
-            protocol          = "server-decoration",
-            vendored_protocol = True,
-            target            = "video/out/wayland/srv-decor.c")
-        ctx.wayland_protocol_header(proto_dir = "video/out/wayland",
-            protocol          = "server-decoration",
-            vendored_protocol = True,
-            target            = "video/out/wayland/srv-decor.h")
+        ctx.wayland_protocol_code(proto_dir = ctx.env.WL_PROTO_DIR,
+            protocol  = "unstable/xdg-decoration/xdg-decoration-unstable-v1",
+            target    = "video/out/wayland/xdg-decoration-v1.c")
+        ctx.wayland_protocol_header(proto_dir = ctx.env.WL_PROTO_DIR,
+            protocol  = "unstable/xdg-decoration/xdg-decoration-unstable-v1",
+            target    = "video/out/wayland/xdg-decoration-v1.h")
 
     ctx(features = "ebml_header", target = "ebml_types.h")
     ctx(features = "ebml_definitions", target = "ebml_defs.c")
@@ -166,6 +164,7 @@ def build(ctx):
     if ctx.dependency_satisfied('macos-cocoa-cb'):
         swift_source = [
             ( "osdep/macOS_mpv_helper.swift" ),
+            ( "osdep/macOS_swift_extensions.swift" ),
             ( "video/out/cocoa-cb/events_view.swift" ),
             ( "video/out/cocoa-cb/video_layer.swift" ),
             ( "video/out/cocoa-cb/window.swift" ),
@@ -236,12 +235,10 @@ def build(ctx):
         ( "audio/out/ao_alsa.c",                 "alsa" ),
         ( "audio/out/ao_audiounit.m",            "audiounit" ),
         ( "audio/out/ao_coreaudio.c",            "coreaudio" ),
-        ( "audio/out/ao_coreaudio_chmap.c",      "audiounit" ),
-        ( "audio/out/ao_coreaudio_chmap.c",      "coreaudio" ),
+        ( "audio/out/ao_coreaudio_chmap.c",      "coreaudio || audiounit" ),
         ( "audio/out/ao_coreaudio_exclusive.c",  "coreaudio" ),
         ( "audio/out/ao_coreaudio_properties.c", "coreaudio" ),
-        ( "audio/out/ao_coreaudio_utils.c",      "audiounit" ),
-        ( "audio/out/ao_coreaudio_utils.c",      "coreaudio" ),
+        ( "audio/out/ao_coreaudio_utils.c",      "coreaudio || audiounit" ),
         ( "audio/out/ao_jack.c",                 "jack" ),
         ( "audio/out/ao_lavc.c" ),
         ( "audio/out/ao_null.c" ),
@@ -503,11 +500,10 @@ def build(ctx):
         ( "video/out/vulkan/formats.c",          "vulkan" ),
         ( "video/out/vulkan/malloc.c",           "vulkan" ),
         ( "video/out/vulkan/ra_vk.c",            "vulkan" ),
-        ( "video/out/vulkan/spirv_nvidia.c",     "vulkan" ),
         ( "video/out/vulkan/utils.c",            "vulkan" ),
         ( "video/out/w32_common.c",              "win32-desktop" ),
         ( "video/out/wayland/idle-inhibit-v1.c", "wayland" ),
-        ( "video/out/wayland/srv-decor.c",       "wayland" ),
+        ( "video/out/wayland/xdg-decoration-v1.c", "wayland" ),
         ( "video/out/wayland/xdg-shell.c",       "wayland" ),
         ( "video/out/wayland_common.c",          "wayland" ),
         ( "video/out/win32/displayconfig.c",     "win32-desktop" ),
